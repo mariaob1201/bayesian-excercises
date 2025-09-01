@@ -80,3 +80,55 @@ cat("\nDIC (Penalized deviance rounded to nearest whole number):", round(DIC), "
 summary(mcmc_fit)
 
 ############## posterior distribution
+# Load required libraries
+library("car")
+library("MCMCpack")
+
+# Load the Anscombe data
+data("Anscombe")
+
+# Fit the Bayesian linear regression model using MCMCpack
+# (This is the original model from your code)
+set.seed(123)  # for reproducibility
+mcmc_fit <- MCMCregress(
+  education ~ income + young + urban, 
+  data = Anscombe,
+  b0 = 0,           # prior mean for coefficients
+  B0 = 1e-6,        # prior precision for coefficients (diffuse prior)
+  c0 = 0.001,       # prior shape parameter for error variance
+  d0 = 0.001,       # prior scale parameter for error variance
+  mcmc = 100000,    # large number of MCMC samples
+  burnin = 10000,   # burn-in samples
+  thin = 1          # no thinning
+)
+
+# Extract the posterior samples for the income coefficient
+income_coeff_samples <- mcmc_fit[, "income"]
+
+# Calculate the posterior probability that income coefficient > 0
+prob_positive <- mean(income_coeff_samples > 0)
+
+# Print results
+cat("Summary statistics for income coefficient:\n")
+cat("Posterior mean:", round(mean(income_coeff_samples), 4), "\n")
+cat("Posterior SD:", round(sd(income_coeff_samples), 4), "\n")
+cat("95% Credible interval:", round(quantile(income_coeff_samples, c(0.025, 0.975)), 4), "\n")
+cat("\nNumber of posterior samples:", length(income_coeff_samples), "\n")
+cat("Number of samples where income coeff > 0:", sum(income_coeff_samples > 0), "\n")
+cat("Posterior probability that income coefficient > 0:", round(prob_positive, 4), "\n")
+cat("Answer (rounded to 2 decimal places):", round(prob_positive, 2), "\n")
+
+# Optional: Create a histogram to visualize the posterior distribution
+hist(income_coeff_samples, 
+     main = "Posterior Distribution of Income Coefficient",
+     xlab = "Income Coefficient",
+     breaks = 50,
+     col = "lightblue",
+     border = "white")
+abline(v = 0, col = "red", lwd = 2, lty = 2)
+abline(v = mean(income_coeff_samples), col = "blue", lwd = 2)
+legend("topright", 
+       c("Zero line", "Posterior mean"), 
+       col = c("red", "blue"), 
+       lty = c(2, 1), 
+       lwd = 2)

@@ -1,3 +1,6 @@
+### Please visit the resources of JAGS, an introduction
+# https://d3c33hcgiwev3.cloudfront.net/_4ec003e4706226af504d524aafb2c527_JAGSintro.html?Expires=1756771200&Signature=OdYkCeDjRpfgsmb-hrB~ae7gjZTlq5-eqo8M39pt9B9BTSlGxfyPzCygkRfd5-dbe0T5O3ZF-4ZKRujTtrjndGgpOQr-fSpeamvQ49JhdKP4h7F-jVBInqsGL2ARoNjAyQQYVZvKW82Rw98Q2fOrS3ksBWLqVaN~DzSOI-pAQrg_&Key-Pair-Id=APKAJLTNE6QMUY6HBC5A
+
 library(readr); library(coda); library(rjags)
 
 dat <- read.csv("callers.csv")
